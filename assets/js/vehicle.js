@@ -75,4 +75,33 @@ $(document).ready(function () {
   });
 
   // Update vehicle
+  $("#updateBtn").click(function () {
+    const vehicleCode = $("#vehicleCode").val();
+    if (!vehicleCode) return alert("Please enter Vehicle Code to update.");
+
+    let formData = {
+      licensePlateNumber: $("#licensePlate").val(),
+      vehicleCategory: $("#vehicleCategory").val(),
+      fuelType: $("#fuelType").val(),
+      status: $("#status").val(),
+      allocatedStaff: $("#allocatedStaff").val(),
+      remarks: $("#remarks").val(),
+    };
+
+    $.ajax({
+      url: `http://localhost:5050/cropmonitoring/api/v1/vehicles/${vehicleCode}`,
+      type: "PATCH",
+      data: JSON.stringify(formData),
+      contentType: "application/json",
+      success: function () {
+        alert("Vehicle updated successfully!");
+        clearForm();
+      },
+      error: function (xhr) {
+        alert("Failed to update vehicle: " + xhr.responseText);
+      },
+    });
+  });
+
+  // Delete vehicle
 });

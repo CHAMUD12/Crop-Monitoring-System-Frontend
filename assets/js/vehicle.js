@@ -150,4 +150,17 @@ $(document).ready(function () {
   });
 
   // Clear form
+  $(document).ready(function () {
+    generateVehicleCode();
+
+    $("#clearBtn").on("click", function () {
+      generateVehicleCode();
+
+      $("#vehicleForm")
+        .find("input, select, textarea")
+        .not("#vehicleCode")
+        .val("")
+        .trigger("change");
+    });
+  });
 });

@@ -104,4 +104,22 @@ $(document).ready(function () {
   });
 
   // Delete vehicle
+  $("#deleteBtn").click(function () {
+    const vehicleCode = $("#vehicleCode").val();
+    if (!vehicleCode) return alert("Please enter Vehicle Code to delete.");
+
+    $.ajax({
+      url: `http://localhost:5050/cropmonitoring/api/v1/vehicles/${vehicleCode}`,
+      type: "DELETE",
+      success: function () {
+        alert("Vehicle deleted successfully!");
+        clearForm();
+      },
+      error: function (xhr) {
+        alert("Failed to delete vehicle: " + xhr.responseText);
+      },
+    });
+  });
+
+  // Get all vehicles
 });

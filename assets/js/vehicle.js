@@ -122,4 +122,32 @@ $(document).ready(function () {
   });
 
   // Get all vehicles
+  $("#getAllBtn").click(function () {
+    $.ajax({
+      url: "http://localhost:5050/cropmonitoring/api/v1/vehicles/allVehicles",
+      type: "GET",
+      success: function (vehicles) {
+        let vehicleRows = "";
+        vehicles.forEach((vehicle) => {
+          vehicleRows += `
+            <tr>
+              <td>${vehicle.vehicleCode}</td>
+              <td>${vehicle.licensePlateNumber}</td>
+              <td>${vehicle.vehicleCategory}</td>
+              <td>${vehicle.fuelType}</td>
+              <td>${vehicle.status}</td>
+              <td>${vehicle.allocatedStaff}</td>
+              <td>${vehicle.remarks}</td>
+            </tr>
+          `;
+        });
+        $("#vehicleTableBody").html(vehicleRows);
+      },
+      error: function (xhr) {
+        alert("Failed to fetch vehicles: " + xhr.responseText);
+      },
+    });
+  });
+
+  // Clear form
 });

@@ -6,6 +6,7 @@ $(document).ready(function () {
   }
   generateVehicleCode();
 
+  // save vehicle
   $("#vehicleForm").on("submit", function (e) {
     e.preventDefault();
 
@@ -34,4 +35,44 @@ $(document).ready(function () {
       },
     });
   });
+
+  // search vehicle
+  function searchVehicle() {
+    const vehicleCode = $("#searchField").val();
+    if (!vehicleCode) return alert("Please enter Vehicle Code to search.");
+
+    $.ajax({
+      url: `http://localhost:5050/cropmonitoring/api/v1/vehicles`,
+      type: "GET",
+      data: { vehicleCode },
+      success: function (vehicles) {
+        if (vehicles.length > 0) {
+          const vehicle = vehicles[0];
+          $("#vehicleCode").val(vehicle.vehicleCode);
+          $("#licensePlate").val(vehicle.licensePlateNumber);
+          $("#vehicleCategory").val(vehicle.vehicleCategory);
+          $("#fuelType").val(vehicle.fuelType);
+          $("#status").val(vehicle.status);
+          $("#allocatedStaff").val(vehicle.allocatedStaff);
+          $("#remarks").val(vehicle.remarks);
+        } else {
+          alert("No vehicle found with that code.");
+        }
+      },
+      error: function (xhr) {
+        alert("Failed to search vehicle: " + xhr.responseText);
+      },
+    });
+  }
+
+  $("#searchIcon").click(searchVehicle);
+
+  $("#searchField").on("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      searchVehicle();
+    }
+  });
+
+  // Update vehicle
 });

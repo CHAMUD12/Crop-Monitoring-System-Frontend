@@ -62,5 +62,35 @@ $(document).ready(function () {
     });
   });
 
-  
+  // Get All Crops
+  $("#getAllBtn").on("click", function () {
+    $.ajax({
+      url: "http://localhost:5050/cropmonitoring/api/v1/crops/allcrops",
+      type: "GET",
+      contentType: "application/json",
+      success: function (data) {
+        let tableBody = $("#cropTableBody");
+        tableBody.empty();
+        data.forEach((crop) => {
+          tableBody.append(`
+          <tr>
+            <td>${crop.cropCode}</td>
+            <td>${crop.cropCommonName}</td>
+            <td>${crop.cropScientificName}</td>
+            <td>${crop.category}</td>
+            <td>${crop.cropSeason}</td>
+            <td>${crop.fieldCode}</td>
+            <td><img src="data:image/png;base64,${crop.cropImage}" alt="Crop Image" style="max-height: 50px;"></td>
+          </tr>
+        `);
+        });
+        $("#cropListModal").modal("show");
+      },
+      error: function () {
+        alert("Error retrieving crop list.");
+      },
+    });
+  });
+
+
 });

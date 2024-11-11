@@ -33,5 +33,34 @@ $(document).ready(function () {
     });
   }
 
+  // Save Crop
+  $("#cropForm").on("submit", function (e) {
+    e.preventDefault();
 
+    let formData = new FormData(this);
+    formData.append("cropCode", $("#cropCode").val());
+    formData.append("cropCommonName", $("#cropCommonName").val());
+    formData.append("cropScientificName", $("#cropScientificName").val());
+    formData.append("category", $("#cropCategory").val());
+    formData.append("cropSeason", $("#cropSeason").val());
+    formData.append("fieldCode", $("#field").val());
+    formData.append("cropImage", $("#cropImage")[0].files[0]);
+
+    $.ajax({
+      url: "http://localhost:5050/cropmonitoring/api/v1/crops",
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function (response) {
+        alert("Crop saved successfully!");
+        $("#cropForm")[0].reset();
+      },
+      error: function (xhr, status, error) {
+        alert("Error saving crop: " + xhr.responseJSON.message);
+      },
+    });
+  });
+
+  
 });

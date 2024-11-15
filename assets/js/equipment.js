@@ -73,4 +73,33 @@ $(document).ready(function () {
       },
     });
   });
+
+  // Get All Equipment
+  $("#getAllBtn").on("click", function () {
+    $.ajax({
+      url: "http://localhost:5050/cropmonitoring/api/v1/equipment/allEquipment",
+      type: "GET",
+      contentType: "application/json",
+      success: function (data) {
+        let tableBody = $("#equipmentTableBody");
+        tableBody.empty();
+        data.forEach((equipment) => {
+          tableBody.append(`
+          <tr>
+            <td>${equipment.equipmentId}</td>
+            <td>${equipment.equipmentName}</td>
+            <td>${equipment.equipmentType}</td>
+            <td>${equipment.equipmentStatus}</td>
+            <td>${equipment.id}</td>
+            <td>${equipment.fieldCode}</td>
+          </tr>
+        `);
+        });
+        $("#equipmentListModal").modal("show");
+      },
+      error: function () {
+        alert("Error retrieving equipment list.");
+      },
+    });
+  });
 });

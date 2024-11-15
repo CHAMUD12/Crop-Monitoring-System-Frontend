@@ -221,7 +221,7 @@ $("#getAllBtn").click(function () {
             <td>${staff.addressLine05 || "N/A"}</td>
             <td>${staff.contactNo}</td>
             <td>${staff.email}</td>
-            <td>${staff.vehicle ? staff.vehicle.vehicleCode : "N/A"}</td>
+            <td>${staff.vehicleCode}</td>
           </tr>
         `;
       });

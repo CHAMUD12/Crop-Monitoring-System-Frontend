@@ -71,7 +71,7 @@ $(document).ready(function () {
     });
   });
 
-  // search staff
+  // search staff member
   $("#searchIcon").on("click", function () {
     searchAndFillStaffForm();
   });
@@ -125,5 +125,40 @@ $(document).ready(function () {
       },
     });
   }
+
+  // Update Staff
+  $("#updateStaffBtn").on("click", function () {
+    const staffId = $("#staffId").val();
+    const staffData = {
+      firstName: $("#firstName").val(),
+      lastName: $("#lastName").val(),
+      designation: $("#designation").val(),
+      gender: $("#gender").val(),
+      joinedDate: $("#joinedDate").val(),
+      dob: $("#dob").val(),
+      contactNo: $("#contactNo").val(),
+      email: $("#email").val(),
+      role: $("#role").val(),
+      addressLine01: $("#address1").val(),
+      addressLine02: $("#address2").val(),
+      addressLine03: $("#address3").val(),
+      addressLine04: $("#address4").val(),
+      addressLine05: $("#address5").val(),
+      vehicleCode: $("#vehicleList").val(),
+    };
+
+    $.ajax({
+      url: `http://localhost:5050/cropmonitoring/api/v1/staff/${staffId}`,
+      type: "PATCH",
+      contentType: "application/json",
+      data: JSON.stringify(staffData),
+      success: function () {
+        alert("Staff updated successfully!");
+      },
+      error: function () {
+        alert("Error updating staff.");
+      },
+    });
+  });
   
 });

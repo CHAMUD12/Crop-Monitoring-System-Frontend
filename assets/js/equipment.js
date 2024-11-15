@@ -102,4 +102,48 @@ $(document).ready(function () {
       },
     });
   });
+
+  // Search Equipment
+  $("#searchIcon").on("click", function () {
+    searchAndFillEquipmentForm();
+  });
+
+  $("#searchEquipment").on("keypress", function (e) {
+    if (e.which == 13) {
+      searchAndFillEquipmentForm();
+    }
+  });
+
+  function searchAndFillEquipmentForm() {
+    const searchTerm = $("#searchEquipment").val().trim();
+    if (searchTerm === "") {
+      alert("Please enter an equipment code or name.");
+      return;
+    }
+
+    $.ajax({
+      url: `http://localhost:5050/cropmonitoring/api/v1/equipment?searchTerm=${encodeURIComponent(
+        searchTerm
+      )}`,
+      type: "GET",
+      contentType: "application/json",
+      success: function (data) {
+        if (data.length === 0) {
+          alert("No matching equipment found.");
+          return;
+        }
+
+        const equipment = data[0];
+        $("#equipmentId").val(equipment.equipmentId);
+        $("#equipmentName").val(equipment.equipmentName);
+        $("#equipmentType").val(equipment.equipmentType).change();
+        $("#status").val(equipment.equipmentStatus).change();
+        $("#assignedField").val(equipment.fieldCode).change();
+        $("#assignedStaff").val(equipment.id).change();
+      },
+      error: function (xhr, status, error) {
+        alert("Error retrieving equipment data: " + xhr.responseJSON.message);
+      },
+    });
+  }
 });

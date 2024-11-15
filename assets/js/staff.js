@@ -71,7 +71,7 @@ $(document).ready(function () {
     });
   });
 
-  // search staff member
+  // search satff member
   $("#searchIcon").on("click", function () {
     searchAndFillStaffForm();
   });
@@ -160,5 +160,23 @@ $(document).ready(function () {
       },
     });
   });
-  
+
+  // Delete Staff
+  $("#deleteStaffBtn").on("click", function () {
+    const staffId = $("#staffId").val();
+    if (confirm("Are you sure you want to delete this staff member?")) {
+      $.ajax({
+        url: `http://localhost:5050/cropmonitoring/api/v1/staff/${staffId}`,
+        type: "DELETE",
+        success: function () {
+          alert("Staff deleted successfully!");
+          $("#staffForm")[0].reset();
+          generateStaffID();
+        },
+        error: function () {
+          alert("Error deleting staff.");
+        },
+      });
+    }
+  });
 });

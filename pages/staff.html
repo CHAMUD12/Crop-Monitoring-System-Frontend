@@ -25,6 +25,28 @@
     <!-- Main Content -->
     <div id="content" style="margin-left: 260px; margin-top: 60px">
       <div class="form-container">
+
+        <div class="mb-3 position-relative d-flex justify-content-end">
+          <input
+            type="text"
+            id="searchStaff"
+            class="form-control"
+            placeholder="Search by id or name"
+            style="width: 250px"
+          />
+          <i
+            class="fas fa-search position-absolute"
+            id="searchIcon"
+            style="
+              right: 10px;
+              top: 50%;
+              transform: translateY(-50%);
+              cursor: pointer;
+              line-height: 1;
+            "
+          ></i>
+        </div>
+
         <h2>Staff Management</h2>
         <form id="staffForm">
           <div class="row mb-3">
@@ -144,34 +166,9 @@
               </select>
             </div>
             <div class="col-md-6">
-              <label for="fieldList" class="form-label">Field</label>
-              <select class="form-control" id="fieldList" multiple="multiple">
-                <option value="Rice Palate A">Rice Palate A</option>
-                <option value="Rice Palate B">Rice Palate B</option>
-                <option value="Cowpea Palate A">Cowpea Palate A</option>
-                <option value="Cowpea Palate B">Cowpea Palate B</option>
-                <option value="Green gram Palate A">Green gram Palate A</option>
-                <option value="Mix Palate A">Mix Palate A</option>
-                <option value="Mix Palate B">Mix Palate B</option>
-                <option value="Mix Palate C">Mix Palate C</option>
-              </select>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-6">
               <label for="vehicleList" class="form-label">Vehicle</label>
               <select class="form-select" id="vehicleList" required>
                 <option value="" disabled selected>Select Vehicle</option>
-                <option value="Car">Car</option>
-                <option value="Van">Van</option>
-                <option value="Motorbikes">Motorbikes</option>
-                <option value="Tractors – Land masters">
-                  Tractors – Land masters
-                </option>
-                <option value="Tractors - 4WD">Tractors - 4WD</option>
-                <option value="Tankers truck">Tankers truck</option>
-                <option value="Land vehicles">Land vehicles</option>
-                <option value="Lorry">Lorry</option>
               </select>
             </div>
           </div>

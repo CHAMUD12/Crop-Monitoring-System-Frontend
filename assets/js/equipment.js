@@ -192,4 +192,19 @@ $(document).ready(function () {
       },
     });
   });
+
+  // Clear form
+  $(document).ready(function () {
+    generateEquipmentID();
+
+    $("#clearBtn").on("click", function () {
+      generateEquipmentID();
+
+      $("#equipmentForm")
+        .find("input, select, textarea")
+        .not("#equipmentId")
+        .val("")
+        .trigger("change");
+    });
+  });
 });

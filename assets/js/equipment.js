@@ -146,4 +146,32 @@ $(document).ready(function () {
       },
     });
   }
+
+  // Update Equipment
+  $("#updateBtn").click(function () {
+    const equipmentId = $("#equipmentId").val();
+    if (!equipmentId) return alert("Please enter Equipment Id to update.");
+
+    let formData = {
+      equipmentName: $("#equipmentName").val(),
+      equipmentType: $("#equipmentType").val(),
+      equipmentStatus: $("#status").val(),
+      fieldCode: $("#assignedField").val(),
+      id: $("#assignedStaff").val(),
+    };
+
+    $.ajax({
+      url: `http://localhost:5050/cropmonitoring/api/v1/equipment/${equipmentId}`,
+      type: "PATCH",
+      data: JSON.stringify(formData),
+      contentType: "application/json",
+      success: function () {
+        alert("Equipment updated successfully!");
+        clearForm();
+      },
+      error: function (xhr) {
+        alert("Failed to update Equipment: " + xhr.responseText);
+      },
+    });
+  });
 });

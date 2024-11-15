@@ -179,4 +179,10 @@ $(document).ready(function () {
       });
     }
   });
+
+  // Clear Staff Form
+  $("#clearStaffBtn").on("click", function () {
+    $("#staffForm")[0].reset();
+    generateStaffID();
+  });
 });

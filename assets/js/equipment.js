@@ -44,4 +44,33 @@ $(document).ready(function () {
       },
     });
   }
+
+  // Save Equipment
+  $("#equipmentForm").on("submit", function (e) {
+    e.preventDefault();
+
+    let formData = new FormData(this);
+    formData.append("equipmentId", $("#equipmentId").val());
+    formData.append("equipmentName", $("#equipmentName").val());
+    formData.append("equipmentType", $("#equipmentType").val());
+    formData.append("equipmentStatus", $("#status").val());
+    formData.append("fieldCode", $("#assignedField").val());
+    formData.append("id", $("#assignedStaff").val());
+
+    $.ajax({
+      url: "http://localhost:5050/cropmonitoring/api/v1/equipment",
+      type: "POST",
+      data: JSON.stringify(Object.fromEntries(formData)),
+      contentType: "application/json",
+      processData: false,
+      success: function (response) {
+        alert("Equipment saved successfully!");
+        $("#equipmentForm")[0].reset();
+        //
+      },
+      error: function (xhr, status, error) {
+        alert("Error saving equipment: " + xhr.responseJSON.message);
+      },
+    });
+  });
 });

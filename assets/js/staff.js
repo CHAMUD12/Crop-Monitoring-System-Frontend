@@ -70,4 +70,60 @@ $(document).ready(function () {
       },
     });
   });
+
+  // search staff
+  $("#searchIcon").on("click", function () {
+    searchAndFillStaffForm();
+  });
+
+  $("#searchStaff").on("keypress", function (event) {
+    if (event.which === 13) {
+      searchAndFillStaffForm();
+    }
+  });
+
+  function searchAndFillStaffForm() {
+    const searchTerm = $("#searchStaff").val().trim();
+    if (searchTerm === "") {
+      alert("Please enter a staff ID or name.");
+      return;
+    }
+
+    $.ajax({
+      url: `http://localhost:5050/cropmonitoring/api/v1/staff?searchTerm=${encodeURIComponent(
+        searchTerm
+      )}`,
+      type: "GET",
+      success: function (staffList) {
+        if (staffList.length === 0) {
+          alert("No matching staff found.");
+          return;
+        }
+
+        const staff = staffList[0];
+        $("#staffId").val(staff.id);
+        $("#firstName").val(staff.firstName);
+        $("#lastName").val(staff.lastName);
+        $("#designation").val(staff.designation).change();
+        $("#gender").val(staff.gender).change();
+        $("#joinedDate").val(
+          new Date(staff.joinedDate).toISOString().slice(0, 10)
+        );
+        $("#dob").val(new Date(staff.dob).toISOString().slice(0, 10));
+        $("#contactNo").val(staff.contactNo);
+        $("#email").val(staff.email);
+        $("#role").val(staff.role).change();
+        $("#address1").val(staff.addressLine01);
+        $("#address2").val(staff.addressLine02);
+        $("#address3").val(staff.addressLine03);
+        $("#address4").val(staff.addressLine04);
+        $("#address5").val(staff.addressLine05);
+        $("#vehicleList").val(staff.vehicleCode).change();
+      },
+      error: function (xhr) {
+        alert("Error retrieving staff data: " + xhr.responseText);
+      },
+    });
+  }
+  
 });

@@ -78,4 +78,33 @@ $(document).ready(function () {
       },
     });
   }
+
+  // Save Monitoring Log
+  $("#monitoringLogForm").on("submit", function (e) {
+    e.preventDefault();
+    let formData = new FormData(this);
+    formData.append("logCode", $("#logCode").val());
+    formData.append("logDate", $("#logDate").val());
+    formData.append("observation", $("#logDetails").val());
+    formData.append("logImage", $("#observedImage")[0].files[0]);
+    formData.append("fieldCode", $("#fieldSelect").val());
+    formData.append("cropCode", $("#cropSelect").val());
+    formData.append("staffId", $("#staffSelect").val());
+
+    $.ajax({
+      url: "http://localhost:5050/cropmonitoring/api/v1/monitoringLog",
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function () {
+        alert("Monitoring log saved successfully!");
+        $("#monitoringLogForm")[0].reset();
+        generateLogCode();
+      },
+      error: function () {
+        alert("Error saving monitoring log.");
+      },
+    });
+  });
 });

@@ -8,6 +8,7 @@ $(document).ready(function () {
   generateLogCode();
   loadFields();
   loadCrops();
+  loadStaff();
 
   // Load fields into dropdown
   function loadFields() {
@@ -53,6 +54,27 @@ $(document).ready(function () {
       },
       error: function () {
         alert("Failed to load crops.");
+      },
+    });
+  }
+
+  // Load staff into dropdown
+  function loadStaff() {
+    $.ajax({
+      url: "http://localhost:5050/cropmonitoring/api/v1/staff/allstaff",
+      method: "GET",
+      success: function (staffList) {
+        $("#staffSelect")
+          .empty()
+          .append("<option disabled selected>Select Staff</option>");
+        staffList.forEach((staff) => {
+          $("#staffSelect").append(
+            new Option(`${staff.id} - ${staff.firstName}`, staff.id)
+          );
+        });
+      },
+      error: function () {
+        alert("Failed to load staff.");
       },
     });
   }

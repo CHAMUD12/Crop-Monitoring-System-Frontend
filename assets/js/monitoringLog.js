@@ -212,3 +212,22 @@ $("#updateLogBtn").on("click", function () {
     },
   });
 });
+
+// Delete Monitoring Log
+$("#deleteLogBtn").on("click", function () {
+  const logCode = $("#logCode").val();
+  if (confirm("Are you sure you want to delete this log?")) {
+    $.ajax({
+      url: `http://localhost:5050/cropmonitoring/api/v1/monitoringLog/${logCode}`,
+      type: "DELETE",
+      success: function () {
+        alert("Monitoring log deleted successfully!");
+        $("#logForm")[0].reset();
+        generateLogCode();
+      },
+      error: function () {
+        alert("Error deleting monitoring log.");
+      },
+    });
+  }
+});

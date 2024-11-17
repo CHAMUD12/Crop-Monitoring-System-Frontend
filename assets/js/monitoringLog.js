@@ -137,3 +137,49 @@ $("#getAllLogsBtn").on("click", function () {
     },
   });
 });
+
+// Search Monitoring Log
+$("#searchIcon").on("click", searchAndFillLogForm);
+$("#searchLog").on("keypress", function (e) {
+  if (e.which === 13) searchAndFillLogForm();
+});
+
+function searchAndFillLogForm() {
+  const searchTerm = $("#searchLog").val().trim();
+  if (searchTerm === "") {
+    alert("Enter log code or observation.");
+    return;
+  }
+
+  $.ajax({
+    url: `http://localhost:5050/cropmonitoring/api/v1/monitoringLog?searchTerm=${encodeURIComponent(
+      searchTerm
+    )}`,
+    type: "GET",
+    success: function (logs) {
+      if (logs.length === 0) {
+        alert("No matching log found.");
+        return;
+      }
+
+      const log = logs[0];
+      $("#logCode").val(log.log_code);
+      $("#logDate").val(log.log_date);
+      $("#logDetails").val(log.observation);
+      $("#fieldSelect").val(log.fieldCode).change();
+      $("#cropSelect").val(log.cropCode).change();
+      $("#staffSelect").val(log.id).change();
+
+      if (log.log_image) {
+        $("#previewObservedImage")
+          .attr("src", `data:image/png;base64,${log.log_image}`)
+          .show();
+      } else {
+        $("#previewObservedImage").hide();
+      }
+    },
+    error: function () {
+      alert("Error retrieving monitoring log.");
+    },
+  });
+}

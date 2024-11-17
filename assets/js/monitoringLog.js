@@ -108,3 +108,32 @@ $(document).ready(function () {
     });
   });
 });
+
+// Get All Monitoring Logs
+$("#getAllLogsBtn").on("click", function () {
+  $.ajax({
+    url: "http://localhost:5050/cropmonitoring/api/v1/monitoringLog/allLogs",
+    type: "GET",
+    success: function (logs) {
+      let tableBody = $("#logTableBody");
+      tableBody.empty();
+      logs.forEach((log) => {
+        tableBody.append(`
+            <tr>
+              <td>${log.log_code}</td>
+              <td>${log.log_date}</td>
+              <td>${log.observation}</td>
+              <td>${log.fieldCode}</td>
+              <td>${log.cropCode}</td>
+              <td>${log.id}</td>
+              <td><img src="data:image/png;base64,${log.log_image}" style="max-height: 50px;"></td>
+            </tr>
+          `);
+      });
+      $("#logListModal").modal("show");
+    },
+    error: function () {
+      alert("Error retrieving monitoring logs.");
+    },
+  });
+});

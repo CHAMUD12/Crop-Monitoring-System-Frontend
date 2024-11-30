@@ -64,6 +64,9 @@ $("#getAllBtn").on("click", function () {
     url: "http://localhost:5050/cropmonitoring/api/v1/fields/allFields",
     type: "GET",
     contentType: "application/json",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
     success: function (data) {
       let tableBody = $("#fieldTableBody");
       tableBody.empty();
@@ -81,8 +84,16 @@ $("#getAllBtn").on("click", function () {
       });
       $("#fieldListModal").modal("show");
     },
-    error: function () {
-      alert("Error retrieving field list.");
+    error: function (xhr) {
+      if (xhr.status === 401) 
+        // Handle session expiration
+        if (confirm("Session expired. Please log in again.")) {
+          window.location.href = "/index.html";
+        }
+      else {
+        // Handle other errors
+        alert("Error retrieving field list : " + (xhr.responseText || "An unexpected error occurred."));
+      }
     },
   });
 });

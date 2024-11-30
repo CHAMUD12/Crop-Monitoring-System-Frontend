@@ -109,6 +109,9 @@ $(document).ready(function () {
         searchTerm
       )}`,
       type: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (staffList) {
         if (staffList.length === 0) {
           alert("No matching staff found.");
@@ -135,8 +138,17 @@ $(document).ready(function () {
         $("#address5").val(staff.addressLine05);
         $("#vehicleList").val(staff.vehicleCode).change();
       },
+
       error: function (xhr) {
-        alert("Error retrieving staff data: " + xhr.responseText);
+        if (xhr.status === 401) 
+          // Handle session expiration
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        else {
+          // Handle other errors
+          alert("Error searching staff: " + (xhr.responseText || "An unexpected error occurred."));
+        }
       },
     });
   }

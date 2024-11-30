@@ -154,6 +154,9 @@ $(document).ready(function () {
       )}`,
       type: "GET",
       contentType: "application/json",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (data) {
         if (data.length === 0) {
           alert("No matching equipment found.");
@@ -168,8 +171,17 @@ $(document).ready(function () {
         $("#assignedField").val(equipment.fieldCode).change();
         $("#assignedStaff").val(equipment.id).change();
       },
-      error: function (xhr, status, error) {
-        alert("Error retrieving equipment data: " + xhr.responseJSON.message);
+
+      error: function (xhr) {
+        if (xhr.status === 401) 
+          // Handle session expiration
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        else {
+          // Handle other errors
+          alert("Error searching equipment: " + (xhr.responseText || "An unexpected error occurred."));
+        }
       },
     });
   }

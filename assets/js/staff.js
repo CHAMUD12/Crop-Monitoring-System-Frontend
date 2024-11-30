@@ -13,6 +13,9 @@ $(document).ready(function () {
     $.ajax({
       url: "http://localhost:5050/cropmonitoring/api/v1/vehicles/allVehicles",
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },  
       success: function (vehicles) {
         $("#vehicleList")
           .empty()

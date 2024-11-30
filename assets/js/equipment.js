@@ -14,6 +14,9 @@ $(document).ready(function () {
     $.ajax({
       url: "http://localhost:5050/cropmonitoring/api/v1/staff/allstaff",
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (staffList) {
         staffList.forEach((staff) => {
           $("#assignedStaff").append(

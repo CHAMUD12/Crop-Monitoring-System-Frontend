@@ -83,6 +83,9 @@ $(document).ready(function () {
       url: "http://localhost:5050/cropmonitoring/api/v1/crops/allcrops",
       type: "GET",
       contentType: "application/json",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (data) {
         let tableBody = $("#cropTableBody");
         tableBody.empty();
@@ -101,8 +104,17 @@ $(document).ready(function () {
         });
         $("#cropListModal").modal("show");
       },
-      error: function () {
-        alert("Error retrieving crop list.");
+
+      error: function (xhr) {
+        if (xhr.status === 401) 
+          // Handle session expiration
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        else {
+          // Handle other errors
+          alert("Error retrieving crop list: " + (xhr.responseText || "An unexpected error occurred."));
+        }
       },
     });
   });

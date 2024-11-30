@@ -35,6 +35,9 @@ $(document).ready(function () {
     $.ajax({
       url: "http://localhost:5050/cropmonitoring/api/v1/fields/allFields",
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (fieldList) {
         fieldList.forEach((field) => {
           $("#assignedField").append(

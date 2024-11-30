@@ -136,11 +136,26 @@ $("#updateBtn").on("click", function () {
     data: formData,
     contentType: false,
     processData: false,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
     success: function () {
       alert("Field updated successfully!");
     },
-    error: function () {
-      alert("Error updating field.");
+
+    error: function (xhr) {
+      if (xhr.status === 401) {
+        // Handle session expiration
+        if (confirm("Session expired. Please log in again.")) {
+          window.location.href = "/index.html";
+        }
+      } else if (xhr.status === 403) {
+        // Handle insufficient permissions
+        alert("You do not have permission to perform this action.");
+      } else {
+        // Handle other errors
+        alert("Error updating field: " + (xhr.responseText || "An unexpected error occurred."));
+      }
     },
   });
 });

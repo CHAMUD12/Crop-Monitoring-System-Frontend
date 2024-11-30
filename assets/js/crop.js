@@ -234,13 +234,28 @@ $(document).ready(function () {
       $.ajax({
         url: `http://localhost:5050/cropmonitoring/api/v1/crops/${cropCode}`,
         type: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
         success: function () {
           alert("Crop deleted successfully!");
           $("#cropForm")[0].reset();
           generateCropCode();
         },
-        error: function () {
-          alert("Error deleting crop.");
+
+        error: function (xhr) {
+          if (xhr.status === 401) {
+            // Handle session expiration
+            if (confirm("Session expired. Please log in again.")) {
+              window.location.href = "/index.html";
+            }
+          } else if (xhr.status === 403) {
+            // Handle insufficient permissions
+            alert("You do not have permission to perform this action.");
+          } else {
+            // Handle other errors
+            alert("Error deleting crop: " + (xhr.responseText || "An unexpected error occurred."));
+          }
         },
       });
     }

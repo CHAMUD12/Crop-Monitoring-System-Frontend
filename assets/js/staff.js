@@ -244,11 +244,15 @@ $(document).ready(function () {
   });
 });
 
+// getAll staff
 $("#getAllBtn").click(function () {
   console.log("Fetching all staff...");
   $.ajax({
     url: "http://localhost:5050/cropmonitoring/api/v1/staff/allstaff",
     type: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+    },
     success: function (staffList) {
       console.log("Staff data received:", staffList);
 
@@ -288,9 +292,17 @@ $("#getAllBtn").click(function () {
 
       $("#staffListModal").modal("show");
     },
+
     error: function (xhr) {
-      console.error("Failed to fetch staff data:", xhr.responseText);
-      alert("Failed to fetch staff data.");
+      if (xhr.status === 401) 
+        // Handle session expiration
+        if (confirm("Session expired. Please log in again.")) {
+          window.location.href = "/index.html";
+        }
+      else {
+        // Handle other errors
+        alert("Error to fetch staff data: " + (xhr.responseText || "An unexpected error occurred."));
+      }
     },
   });
 });

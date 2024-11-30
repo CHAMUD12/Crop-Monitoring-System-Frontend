@@ -220,6 +220,9 @@ $(document).ready(function () {
       )}`,
       type: "GET",
       contentType: "application/json",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (data) {
         if (data.length > 0) {
           const field = data[0]; // Use the first matched field
@@ -249,8 +252,17 @@ $(document).ready(function () {
           );
         }
       },
-      error: function () {
-        alert("An error occurred. Please try again.");
+
+      error: function (xhr) {
+        if (xhr.status === 401) 
+          // Handle session expiration
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        else {
+          // Handle other errors
+          alert("Error searching field: " + (xhr.responseText || "An unexpected error occurred."));
+        }
       },
     });
   }

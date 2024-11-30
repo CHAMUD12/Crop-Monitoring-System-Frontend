@@ -32,3 +32,25 @@ $("#signInForm").on("submit", function (e) {
     },
   });
 });
+
+$("#signUpForm").on("submit", function (e) {
+  e.preventDefault();
+
+  const email = $("#signUpEmail").val();
+  const password = $("#signUpPassword").val();
+  const role = $("select").val();
+
+  $.ajax({
+    url: "http://localhost:5050/cropmonitoring/api/v0/auth/signup",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({ email, password, role }),
+    success: function (response) {
+      alert("Sign Up successful! Please log in.");
+      $("#showSignIn").click();
+    },
+    error: function (xhr) {
+      alert("Sign Up failed: " + xhr.responseText);
+    },
+  });
+});

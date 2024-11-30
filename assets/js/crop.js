@@ -13,6 +13,9 @@ $(document).ready(function () {
     $.ajax({
       url: "http://localhost:5050/cropmonitoring/api/v1/fields/allFields", // Endpoint to fetch fields
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (fields) {
         $("#field")
           .empty()

@@ -28,6 +28,7 @@ $(document).ready(function () {
             )
           );
         });
+        $("#vehicleList").append(new Option("Not Allocated", "not-allocated"));
       },
       error: function (xhr) {
         console.error("Failed to load vehicles:", xhr.responseText);
@@ -247,65 +248,118 @@ $(document).ready(function () {
   });
 });
 
-// getAll staff
-$("#getAllBtn").click(function () {
-  console.log("Fetching all staff...");
-  $.ajax({
-    url: "http://localhost:5050/cropmonitoring/api/v1/staff/allstaff",
-    type: "GET",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    },
-    success: function (staffList) {
-      console.log("Staff data received:", staffList);
+$(document).ready(function () {
+  let sessionReturnedVehicles = new Set(
+    JSON.parse(localStorage.getItem("returnedVehicles") || "[]")
+  );
 
-      let staffRows1 = "";
-      let staffRows2 = "";
+  // Save returned vehicles to localStorage
+  function saveReturnedVehiclesToLocalStorage() {
+    localStorage.setItem(
+      "returnedVehicles",
+      JSON.stringify(Array.from(sessionReturnedVehicles))
+    );
+  }
 
-      staffList.forEach((staff) => {
-        staffRows1 += `
-          <tr>
-            <td>${staff.id}</td>
-            <td>${staff.firstName}</td>
-            <td>${staff.lastName}</td>
-            <td>${staff.designation}</td>
-            <td>${staff.gender}</td>
-            <td>${new Date(staff.joinedDate).toLocaleDateString()}</td>
-            <td>${new Date(staff.dob).toLocaleDateString()}</td>
-            <td>${staff.role}</td>
-          </tr>
-        `;
+  // getAll staff
+  $("#getAllBtn").click(function () {
+    console.log("Fetching all staff...");
+    $.ajax({
+      url: "http://localhost:5050/cropmonitoring/api/v1/staff/allstaff",
+      type: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+      success: function (staffList) {
+        console.log("Staff data received:", staffList);
 
-        staffRows2 += `
-          <tr>
-            <td>${staff.addressLine01 || "N/A"}</td>
-            <td>${staff.addressLine02 || "N/A"}</td>
-            <td>${staff.addressLine03 || "N/A"}</td>
-            <td>${staff.addressLine04 || "N/A"}</td>
-            <td>${staff.addressLine05 || "N/A"}</td>
-            <td>${staff.contactNo}</td>
-            <td>${staff.email}</td>
-            <td>${staff.vehicleCode}</td>
-          </tr>
-        `;
-      });
+        let staffRows1 = "";
+        let staffRows2 = "";
 
-      $("#staffTableBody1").html(staffRows1);
-      $("#staffTableBody2").html(staffRows2);
+        staffList.forEach((staff) => {
+          const isReturned = sessionReturnedVehicles.has(staff.id);
 
-      $("#staffListModal").modal("show");
-    },
+          staffRows1 += `
+            <tr>
+              <td>${staff.id}</td>
+              <td>${staff.firstName}</td>
+              <td>${staff.lastName}</td>
+              <td>${staff.designation}</td>
+              <td>${staff.gender}</td>
+              <td>${new Date(staff.joinedDate).toLocaleDateString()}</td>
+              <td>${new Date(staff.dob).toLocaleDateString()}</td>
+              <td>${staff.role}</td>
+            </tr>
+          `;
 
-    error: function (xhr) {
-      if (xhr.status === 401) 
-        // Handle session expiration
-        if (confirm("Session expired. Please log in again.")) {
-          window.location.href = "/index.html";
+          staffRows2 += `
+            <tr>
+              <td>${staff.addressLine01 || "N/A"}</td>
+              <td>${staff.addressLine02 || "N/A"}</td>
+              <td>${staff.addressLine03 || "N/A"}</td>
+              <td>${staff.addressLine04 || "N/A"}</td>
+              <td>${staff.addressLine05 || "N/A"}</td>
+              <td>${staff.contactNo}</td>
+              <td>${staff.email}</td>
+              <td>
+                ${staff.vehicleCode ? staff.vehicleCode : ""}
+                ${
+                  staff.vehicleCode && !isReturned
+                    ? `<button class="btn btn-sm btn-primary return-btn" data-staff-id="${staff.id}" data-vehicle-code="${staff.vehicleCode}">Return</button>`
+                    : "Not Allocated"
+                }
+              </td>
+            </tr>
+          `;
+        });
+
+        $("#staffTableBody1").html(staffRows1);
+        $("#staffTableBody2").html(staffRows2);
+
+        // Attach click handler for return buttons
+        $(".return-btn").click(function () {
+          const staffId = $(this).data("staff-id");
+          const vehicleCode = $(this).data("vehicle-code");
+
+          // Update vehicle status in backend
+          $.ajax({
+            url: `http://localhost:5050/cropmonitoring/api/v1/staff/${staffId}/return-vehicle`,
+            type: "PATCH",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+            success: function () {
+              alert("Vehicle returned successfully!");
+
+              // Update local state and localStorage
+              sessionReturnedVehicles.add(staffId);
+              saveReturnedVehiclesToLocalStorage();
+
+              // Hide the return button dynamically
+              const button = $(`button[data-staff-id="${staffId}"]`);
+              button.closest("td").html("Not Allocated");
+            },
+            error: function () {
+              alert("Error while returning the vehicle. Please try again.");
+            },
+          });
+        });
+
+        $("#staffListModal").modal("show");
+      },
+
+      error: function (xhr) {
+        if (xhr.status === 401) {
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        } else {
+          alert(
+            "Error fetching staff data: " +
+              (xhr.responseText || "An unexpected error occurred.")
+          );
         }
-      else {
-        // Handle other errors
-        alert("Error to fetch staff data: " + (xhr.responseText || "An unexpected error occurred."));
-      }
-    },
+      },
+    });
   });
 });

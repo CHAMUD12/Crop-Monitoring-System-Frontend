@@ -240,7 +240,7 @@ $(document).ready(function () {
     formData.append("cropCode", $("#cropSelect").val());
     formData.append("staffId", $("#staffSelect").val());
     if ($("#observedImage")[0].files[0]) {
-      formData.append("observedImage", $("#observedImage")[0].files[0]);
+      formData.append("logImage", $("#observedImage")[0].files[0]);
     }
 
     $.ajax({
@@ -251,11 +251,26 @@ $(document).ready(function () {
       data: formData,
       contentType: false,
       processData: false,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function () {
         alert("Monitoring log updated successfully!");
       },
-      error: function () {
-        alert("Error updating monitoring log.");
+
+      error: function (xhr) {
+        if (xhr.status === 401) {
+          // Handle session expiration
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        } else if (xhr.status === 403) {
+          // Handle insufficient permissions
+          alert("You do not have permission to perform this action.");
+        } else {
+          // Handle other errors
+          alert("Error updating monitoring log : " + (xhr.responseText || "An unexpected error occurred."));
+        }
       },
     });
   });

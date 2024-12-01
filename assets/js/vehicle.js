@@ -74,6 +74,9 @@ $(document).ready(function () {
       )}`,
       type: "GET",
       contentType: "application/json",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (data) {
         if (data.length === 0) {
           alert("No matching vehicle found.");
@@ -88,8 +91,17 @@ $(document).ready(function () {
         $("#status").val(vehicle.status).change();
         $("#remarks").val(vehicle.remarks);
       },
+
       error: function (xhr) {
-        alert("Error retrieving vehicle data: " + xhr.responseText);
+        if (xhr.status === 401) 
+          // Handle session expiration
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        else {
+          // Handle other errors
+          alert("Error retrieving vehicle data : " + (xhr.responseText || "An unexpected error occurred."));
+        }
       },
     });
   }

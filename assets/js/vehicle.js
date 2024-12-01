@@ -187,6 +187,9 @@ $(document).ready(function () {
     $.ajax({
       url: "http://localhost:5050/cropmonitoring/api/v1/vehicles/allVehicles",
       type: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (vehicles) {
         let vehicleRows = "";
         vehicles.forEach((vehicle) => {
@@ -203,8 +206,17 @@ $(document).ready(function () {
         });
         $("#vehicleTableBody").html(vehicleRows);
       },
+
       error: function (xhr) {
-        alert("Failed to fetch vehicles: " + xhr.responseText);
+        if (xhr.status === 401) 
+          // Handle session expiration
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        else {
+          // Handle other errors
+          alert("Failed to fetch vehicles : " + (xhr.responseText || "An unexpected error occurred."));
+        }
       },
     });
   });

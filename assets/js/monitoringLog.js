@@ -15,6 +15,9 @@ $(document).ready(function () {
     $.ajax({
       url: "http://localhost:5050/cropmonitoring/api/v1/fields/allFields",
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (fields) {
         $("#fieldSelect")
           .empty()
@@ -39,6 +42,9 @@ $(document).ready(function () {
     $.ajax({
       url: "http://localhost:5050/cropmonitoring/api/v1/crops/allcrops",
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (crops) {
         $("#cropSelect")
           .empty()
@@ -63,6 +69,9 @@ $(document).ready(function () {
     $.ajax({
       url: "http://localhost:5050/cropmonitoring/api/v1/staff/allstaff",
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (staffList) {
         $("#staffSelect")
           .empty()

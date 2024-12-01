@@ -282,13 +282,28 @@ $(document).ready(function () {
       $.ajax({
         url: `http://localhost:5050/cropmonitoring/api/v1/monitoringLog/${logCode}`,
         type: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
         success: function () {
           alert("Monitoring log deleted successfully!");
           $("#logForm")[0].reset();
           generateLogCode();
         },
-        error: function () {
-          alert("Error deleting monitoring log.");
+
+        error: function (xhr) {
+          if (xhr.status === 401) {
+            // Handle session expiration
+            if (confirm("Session expired. Please log in again.")) {
+              window.location.href = "/index.html";
+            }
+          } else if (xhr.status === 403) {
+            // Handle insufficient permissions
+            alert("You do not have permission to perform this action.");
+          } else {
+            // Handle other errors
+            alert("Error delete monitoring log: " + (xhr.responseText || "An unexpected error occurred."));
+          }
         },
       });
     }

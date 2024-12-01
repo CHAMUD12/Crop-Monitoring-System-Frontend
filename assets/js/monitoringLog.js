@@ -137,6 +137,9 @@ $(document).ready(function () {
     $.ajax({
       url: "http://localhost:5050/cropmonitoring/api/v1/monitoringLog/allLogs",
       type: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (logs) {
         let tableBody = $("#logTableBody");
         tableBody.empty();
@@ -155,8 +158,17 @@ $(document).ready(function () {
         });
         $("#logListModal").modal("show");
       },
-      error: function () {
-        alert("Error retrieving monitoring logs.");
+
+      error: function (xhr) {
+        if (xhr.status === 401) 
+          // Handle session expiration
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        else {
+          // Handle other errors
+          alert("Error retrieving monitoring logs : " + (xhr.responseText || "An unexpected error occurred."));
+        }
       },
     });
   });

@@ -191,6 +191,9 @@ $(document).ready(function () {
         searchTerm
       )}`,
       type: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
       success: function (logs) {
         if (logs.length === 0) {
           alert("No matching log found.");
@@ -213,8 +216,17 @@ $(document).ready(function () {
           $("#previewObservedImage").hide();
         }
       },
-      error: function () {
-        alert("Error retrieving monitoring log.");
+
+      error: function (xhr) {
+        if (xhr.status === 401) 
+          // Handle session expiration
+          if (confirm("Session expired. Please log in again.")) {
+            window.location.href = "/index.html";
+          }
+        else {
+          // Handle other errors
+          alert("Error retrieving monitoring log : " + (xhr.responseText || "An unexpected error occurred."));
+        }
       },
     });
   }

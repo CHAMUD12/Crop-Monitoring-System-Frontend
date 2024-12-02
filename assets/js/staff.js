@@ -311,15 +311,21 @@ $(document).ready(function () {
               <td>${staff.contactNo}</td>
               <td>${staff.email}</td>
               <td>
-                ${staff.vehicleCode ? staff.vehicleCode : ""}
                 ${
-                  staff.vehicleCode && !isReturned
-                    ? `<button class="btn btn-sm btn-primary return-btn" data-staff-id="${staff.id}" data-vehicle-code="${staff.vehicleCode}">Return</button>`
+                  staff.vehicleCode
+                    ? `${staff.vehicleCode} ${
+                        !isReturned
+                          ? `<button class="btn btn-sm btn-primary return-btn" 
+                                data-staff-id="${staff.id}" 
+                                data-vehicle-code="${staff.vehicleCode}">
+                                Return
+                            </button>`
+                          : ""
+                      }`
                     : "Not Allocated"
                 }
               </td>
-            </tr>
-          `;
+            </tr>`;
         });
 
         $("#staffTableBody1").html(staffRows1);

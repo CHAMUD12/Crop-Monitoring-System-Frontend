@@ -267,3 +267,13 @@ $(document).ready(function () {
     });
   }
 });
+
+$(document).ready(function () {
+  $("#assigment").click(function () {
+    window.location.href = "fieldStaffAssign.html";
+  });
+});
+
+
+//=========================================
+////=====================================

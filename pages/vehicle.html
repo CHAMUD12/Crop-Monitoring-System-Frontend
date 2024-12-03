@@ -63,12 +63,7 @@
             </div>
             <div class="col-md-6">
               <label for="licensePlate" class="form-label">License Plate</label>
-              <input
-                type="text"
-                class="form-control"
-                id="licensePlate"
-                required
-              />
+              <input type="text" class="form-control" id="licensePlate" />
             </div>
           </div>
           <div class="row mb-3">
@@ -76,7 +71,7 @@
               <label for="vehicleCategory" class="form-label"
                 >Vehicle Category</label
               >
-              <select class="form-select" id="vehicleCategory" required>
+              <select class="form-select" id="vehicleCategory">
                 <option value="" disabled selected>Select Category</option>
                 <option value="car">Car</option>
                 <option value="van">Van</option>
@@ -90,7 +85,7 @@
             </div>
             <div class="col-md-6">
               <label for="fuelType" class="form-label">Fuel Type</label>
-              <select class="form-select" id="fuelType" required>
+              <select class="form-select" id="fuelType">
                 <option value="" disabled selected>Select Fuel Type</option>
                 <option value="petrol">Petrol</option>
                 <option value="diesel">Diesel</option>
@@ -103,7 +98,7 @@
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="status" class="form-label">Status</label>
-              <select class="form-select" id="status" required>
+              <select class="form-select" id="status">
                 <option value="available">Available</option>
                 <option value="out_of_service">Out of Service</option>
               </select>
@@ -229,5 +224,6 @@
     <script src="/assets/js/loader.js"></script>
     <script src="/assets/js/sidebarController.js"></script>
     <script src="/assets/js/vehicle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
 </html>

@@ -79,6 +79,17 @@ $(document).ready(function () {
           </tr>`;
           $("#assignmentTableBody").append(row);
         });
+
+        // Sort
+        if ($.fn.DataTable.isDataTable("#assignmentTable")) {
+          $("#assignmentTable").DataTable().destroy();
+        }
+        $("#assignmentTable").DataTable({
+          paging: true,
+          searching: true,
+          ordering: true,
+          order: [[3, "asc"]],
+        });
       },
       error: function (xhr) {
         console.error("Failed to load assignments:", xhr.responseText);

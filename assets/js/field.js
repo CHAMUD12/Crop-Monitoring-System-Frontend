@@ -14,9 +14,85 @@ function generateFieldCode() {
   document.getElementById("fieldCode").value = code;
 }
 
+function isFirstLetterCapitalized(text) {
+  return /^[A-Z]/.test(text);
+}
+
+// Validation function
+function validateInputsWithPopup() {
+  const fieldNameInput = document.getElementById("fieldName");
+  const fieldLocationInput = document.getElementById("fieldLocation");
+  const fieldSizeInput = document.getElementById("fieldSize");
+
+  const fieldName = fieldNameInput.value.trim();
+  const fieldLocation = fieldLocationInput.value.trim();
+  const fieldSize = fieldSizeInput.value.trim();
+
+  if (!fieldName) {
+    showValidationError("Invalid Input", "Field Name cannot be empty.");
+    return false;
+  }
+
+  if (!isFirstLetterCapitalized(fieldName)) {
+    showValidationError(
+      "Invalid Input",
+      "Field Name must start with a capital letter."
+    );
+    return false;
+  }
+
+  if (!fieldLocation) {
+    showValidationError("Invalid Input", "Field Location cannot be empty.");
+    return false;
+  }
+
+  if (!fieldSize) {
+    showValidationError("Invalid Input", "Field Size cannot be empty.");
+    return false;
+  }
+
+  if (!isFirstLetterCapitalized(fieldLocation)) {
+    showValidationError(
+      "Invalid Input",
+      "Field Location must start with a capital letter."
+    );
+    return false;
+  }
+
+  return true;
+}
+
+function showValidationError(title, text) {
+  Swal.fire({
+    icon: "error",
+    title: title,
+    text: text,
+    footer: '<a href="">Why do I have this issue?</a>',
+  });
+}
+
+function showPopup(type, title, text, confirmCallback = null) {
+  Swal.fire({
+    icon: type,
+    title: title,
+    text: text,
+    showCancelButton: !!confirmCallback,
+    confirmButtonText: "OK",
+    cancelButtonText: "Cancel",
+  }).then((result) => {
+    if (result.isConfirmed && confirmCallback) {
+      confirmCallback();
+    }
+  });
+}
+
 // Save Field
 $("#fieldForm").on("submit", function (e) {
   e.preventDefault();
+
+  if (!validateInputsWithPopup()) {
+    return;
+  }
 
   let formData = new FormData(this);
   formData.append("fieldCode", $("#fieldCode").val());
@@ -36,23 +112,37 @@ $("#fieldForm").on("submit", function (e) {
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
     success: function (response) {
-      alert("Field saved successfully!");
+      Swal.fire(
+        "Save Successfully!",
+        "Field has been saved successfully.",
+        "success"
+      );
       $("#fieldForm")[0].reset();
       generateFieldCode();
     },
 
     error: function (xhr) {
       if (xhr.status === 401) {
-        // Handle session expiration
-        if (confirm("Session expired. Please log in again.")) {
-          window.location.href = "/index.html";
-        }
+        showPopup(
+          "warning",
+          "Session Expired",
+          "Your session has expired. Please log in again.",
+          () => {
+            window.location.href = "/index.html";
+          }
+        );
       } else if (xhr.status === 403) {
-        // Handle insufficient permissions
-        alert("You do not have permission to perform this action.");
+        showPopup(
+          "error",
+          "Permission Denied",
+          "You do not have permission to perform this action."
+        );
       } else {
-        // Handle other errors
-        alert("Error saving field: " + (xhr.responseText || "An unexpected error occurred."));
+        showPopup(
+          "error",
+          "Error",
+          xhr.responseText || "An unexpected error occurred."
+        );
       }
     },
   });
@@ -85,14 +175,21 @@ $("#getAllBtn").on("click", function () {
       $("#fieldListModal").modal("show");
     },
     error: function (xhr) {
-      if (xhr.status === 401) 
-        // Handle session expiration
-        if (confirm("Session expired. Please log in again.")) {
-          window.location.href = "/index.html";
-        }
-      else {
-        // Handle other errors
-        alert("Error retrieving field list : " + (xhr.responseText || "An unexpected error occurred."));
+      if (xhr.status === 401) {
+        showPopup(
+          "warning",
+          "Session Expired",
+          "Your session has expired. Please log in again.",
+          () => {
+            window.location.href = "/index.html";
+          }
+        );
+      } else {
+        showPopup(
+          "error",
+          "Error",
+          xhr.responseText || "An unexpected error occurred."
+        );
       }
     },
   });
@@ -117,6 +214,9 @@ $(document).ready(function () {
 
 // Update Field
 $("#updateBtn").on("click", function () {
+  if (!validateInputsWithPopup()) {
+    return;
+  }
   let formData = new FormData();
   formData.append("fieldName", $("#fieldName").val());
   formData.append("fieldLocation", $("#fieldLocation").val());
@@ -140,21 +240,35 @@ $("#updateBtn").on("click", function () {
       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
     success: function () {
-      alert("Field updated successfully!");
+      Swal.fire(
+        "Update Successfully!",
+        "Field has been updated successfully.",
+        "success"
+      );
     },
 
     error: function (xhr) {
       if (xhr.status === 401) {
-        // Handle session expiration
-        if (confirm("Session expired. Please log in again.")) {
-          window.location.href = "/index.html";
-        }
+        showPopup(
+          "warning",
+          "Session Expired",
+          "Your session has expired. Please log in again.",
+          () => {
+            window.location.href = "/index.html";
+          }
+        );
       } else if (xhr.status === 403) {
-        // Handle insufficient permissions
-        alert("You do not have permission to perform this action.");
+        showPopup(
+          "error",
+          "Permission Denied",
+          "You do not have permission to perform this action."
+        );
       } else {
-        // Handle other errors
-        alert("Error updating field: " + (xhr.responseText || "An unexpected error occurred."));
+        showPopup(
+          "error",
+          "Error",
+          xhr.responseText || "An unexpected error occurred."
+        );
       }
     },
   });
@@ -163,35 +277,54 @@ $("#updateBtn").on("click", function () {
 // Delete Field
 $("#deleteBtn").on("click", function () {
   const fieldCode = $("#fieldCode").val();
-  if (confirm("Are you sure you want to delete this field?")) {
-    $.ajax({
-      url: `http://localhost:5050/cropmonitoring/api/v1/fields/${fieldCode}`,
-      type: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-      },
-      success: function () {
-        alert("Field deleted successfully!");
-        $("#fieldForm")[0].reset();
-        generateFieldCode();
-      },
+  showPopup(
+    "warning",
+    "Confirm Delete",
+    "Are you sure you want to delete this field?",
+    () => {
+      $.ajax({
+        url: `http://localhost:5050/cropmonitoring/api/v1/fields/${fieldCode}`,
+        type: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        success: function () {
+          Swal.fire(
+            "Delete Successfully!",
+            "Field has been deleted successfully.",
+            "success"
+          );
+          $("#fieldForm")[0].reset();
+          generateFieldCode();
+        },
 
-      error: function (xhr) {
-        if (xhr.status === 401) {
-          // Handle session expiration
-          if (confirm("Session expired. Please log in again.")) {
-            window.location.href = "/index.html";
+        error: function (xhr) {
+          if (xhr.status === 401) {
+            showPopup(
+              "warning",
+              "Session Expired",
+              "Your session has expired. Please log in again.",
+              () => {
+                window.location.href = "/index.html";
+              }
+            );
+          } else if (xhr.status === 403) {
+            showPopup(
+              "error",
+              "Permission Denied",
+              "You do not have permission to perform this action."
+            );
+          } else {
+            showPopup(
+              "error",
+              "Error",
+              xhr.responseText || "An unexpected error occurred."
+            );
           }
-        } else if (xhr.status === 403) {
-          // Handle insufficient permissions
-          alert("You do not have permission to perform this action.");
-        } else {
-          // Handle other errors
-          alert("Error deleting field: " + (xhr.responseText || "An unexpected error occurred."));
-        }
-      },
-    });
-  }
+        },
+      });
+    }
+  );
 });
 
 // Search Field
@@ -210,7 +343,11 @@ $(document).ready(function () {
   function performSearch() {
     const searchTerm = $("#searchField").val().trim();
     if (!searchTerm) {
-      alert("Please enter a field code or name to search.");
+      showPopup(
+        "warning",
+        "Not Found",
+        "Please enter a field code or name to search."
+      );
       return;
     }
 
@@ -225,7 +362,7 @@ $(document).ready(function () {
       },
       success: function (data) {
         if (data.length > 0) {
-          const field = data[0]; // Use the first matched field
+          const field = data[0];
           $("#fieldCode").val(field.fieldCode);
           $("#fieldName").val(field.fieldName);
           $("#fieldLocation").val(field.fieldLocation);
@@ -247,21 +384,30 @@ $(document).ready(function () {
             $("#previewImage2").hide();
           }
         } else {
-          alert(
-            "Field not found. Please check the field code or name and try again."
+          showPopup(
+            "error",
+            "Not Found",
+            "Field not found. Please try again!."
           );
         }
       },
 
       error: function (xhr) {
-        if (xhr.status === 401) 
-          // Handle session expiration
-          if (confirm("Session expired. Please log in again.")) {
-            window.location.href = "/index.html";
-          }
-        else {
-          // Handle other errors
-          alert("Error searching field: " + (xhr.responseText || "An unexpected error occurred."));
+        if (xhr.status === 401) {
+          showPopup(
+            "warning",
+            "Session Expired",
+            "Your session has expired. Please log in again.",
+            () => {
+              window.location.href = "/index.html";
+            }
+          );
+        } else {
+          showPopup(
+            "error",
+            "Error",
+            xhr.responseText || "An unexpected error occurred."
+          );
         }
       },
     });
@@ -273,7 +419,3 @@ $(document).ready(function () {
     window.location.href = "fieldStaffAssign.html";
   });
 });
-
-
-//=========================================
-////=====================================

@@ -251,6 +251,18 @@ $(document).ready(function () {
               </tr>
             `);
         });
+
+        // Sort
+        if ($.fn.DataTable.isDataTable("#logList table")) {
+          $("#logList table").DataTable().destroy();
+        }
+        $("#logList table").DataTable({
+          paging: true,
+          searching: true,
+          ordering: true,
+          order: [[0, "asc"]],
+        });
+        $("#logList table").DataTable();
         $("#logListModal").modal("show");
       },
 

@@ -16,6 +16,11 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
+
     <link rel="stylesheet" href="/assets/css/loader.css" />
     <link rel="stylesheet" href="/assets/css/sidebar.css" />
     <link rel="stylesheet" href="/assets/css/style.css" />
@@ -49,7 +54,7 @@
             "
           ></i>
         </div>
-        
+
         <h2>Crop Management</h2>
         <form id="cropForm">
           <div class="row mb-3">
@@ -200,7 +205,7 @@
             </div>
             <div class="modal-body">
               <div id="cropList">
-                <table class="table table-bordered">
+                <table id="cropTable" class="table table-bordered">
                   <thead class="table-success">
                     <tr>
                       <th>Crop Code</th>
@@ -237,5 +242,6 @@
     <script src="/assets/js/sidebarController.js"></script>
     <script src="/assets/js/crop.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   </body>
 </html>

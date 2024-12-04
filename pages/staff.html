@@ -56,17 +56,17 @@
             </div>
             <div class="col-md-6">
               <label for="firstName" class="form-label">First Name</label>
-              <input type="text" class="form-control" id="firstName" required />
+              <input type="text" class="form-control" id="firstName"  />
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="lastName" class="form-label">Last Name</label>
-              <input type="text" class="form-control" id="lastName" required />
+              <input type="text" class="form-control" id="lastName"  />
             </div>
             <div class="col-md-6">
               <label for="designation" class="form-label">Designation</label>
-              <select class="form-select" id="designation" required>
+              <select class="form-select" id="designation" >
                 <option value="" disabled selected>Select Designation</option>
                 <option>Manager</option>
                 <option>Senior Assistant Manager</option>
@@ -86,7 +86,7 @@
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="gender" class="form-label">Gender</label>
-              <select class="form-select" id="gender" required>
+              <select class="form-select" id="gender" >
                 <option value="" disabled selected>Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -99,23 +99,23 @@
                 type="date"
                 class="form-control"
                 id="joinedDate"
-                required
+                
               />
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="dob" class="form-label">DOB</label>
-              <input type="date" class="form-control" id="dob" required />
+              <input type="date" class="form-control" id="dob"  />
             </div>
             <div class="col-md-6">
               <label for="contactNo" class="form-label">Contact No.</label>
-              <input type="text" class="form-control" id="contactNo" required />
+              <input type="text" class="form-control" id="contactNo"  />
             </div>
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" required />
+            <input type="email" class="form-control" id="email"  />
           </div>
           <div class="mb-3">
             <label for="address" class="form-label">Address</label>
@@ -124,7 +124,7 @@
               class="form-control mb-2"
               id="address1"
               placeholder="Address Line 01"
-              required
+              
             />
             <input
               type="text"
@@ -137,27 +137,27 @@
               class="form-control mb-2"
               id="address3"
               placeholder="City"
-              required
+              
             />
             <input
               type="text"
               class="form-control mb-2"
               id="address4"
               placeholder="State"
-              required
+              
             />
             <input
               type="text"
               class="form-control"
               id="address5"
               placeholder="Postal Code"
-              required
+              
             />
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="role" class="form-label">Role</label>
-              <select class="form-select" id="role" required>
+              <select class="form-select" id="role">
                 <option value="" disabled selected>Select Role</option>
                 <option>MANAGER</option>
                 <option>ADMINISTRATIVE</option>
@@ -167,7 +167,7 @@
             </div>
             <div class="col-md-6">
               <label for="vehicleList" class="form-label">Vehicle</label>
-              <select class="form-select" id="vehicleList" required>
+              <select class="form-select" id="vehicleList">
                 <option value="" disabled selected>Select Vehicle</option>
               </select>
             </div>
@@ -310,5 +310,6 @@
     <script src="/assets/js/loader.js"></script>
     <script src="/assets/js/sidebarController.js"></script>
     <script src="/assets/js/staff.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
 </html>

@@ -217,6 +217,18 @@ $(document).ready(function () {
           </tr>
         `);
         });
+
+        // Sort
+        if ($.fn.DataTable.isDataTable("#cropList table")) {
+          $("#cropList table").DataTable().destroy();
+        }
+        $("#cropList table").DataTable({
+          paging: true,
+          searching: true,
+          ordering: true,
+          order: [[0, "asc"]],
+        });
+        $("#cropList table").DataTable();
         $("#cropListModal").modal("show");
       },
 

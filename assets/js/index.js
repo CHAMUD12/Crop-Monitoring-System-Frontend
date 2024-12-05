@@ -23,7 +23,7 @@ $("#signInForm").on("submit", function (e) {
       localStorage.setItem("accessToken", response.token);
       localStorage.setItem("userRole", response.role);
 
-      window.location.href = "pages/sidebar.html";
+      window.location.href = "pages/dashboard.html";
     },
     error: function (xhr) {
       alert("Login failed: " + xhr.responseText);

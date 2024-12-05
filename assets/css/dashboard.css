@@ -1,0 +1,49 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+}
+.content {
+    padding: 20px;
+}
+.card {
+    margin-bottom: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+.card:hover {
+    transform: translateY(-10px);
+}
+.counter {
+    font-size: 1.5rem;
+}
+.counter-icon {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 50%;
+}
+#map {
+    height: 300px;
+}
+.progress {
+    height: 20px;
+    border-radius: 10px;
+}
+.product-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    transition: box-shadow 0.3s;
+}
+.product-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: var(--card-border-radius);
+    margin-bottom: var(--section-padding);
+    text-align: center;
+}

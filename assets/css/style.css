@@ -7,7 +7,7 @@ body {
     padding: 30px;
   }
   h2 {
-    color: #2e7d32;
+    color: #182063;
     font-weight: bold;
     text-align: center;
     margin-top: 20px;
@@ -16,12 +16,12 @@ body {
   .form-control,
   .form-select {
     margin-bottom: 15px;
-    border: 1px solid #66bb6a;
-    color: #1b5e20;
+    border: 1px solid #7d86d6;
+    color: #182063;
   }
   .form-control:focus,
   .form-select:focus {
-    border-color: #2e7d32;
+    border-color: #182063;
     box-shadow: none;
   }
   .btn {
@@ -36,11 +36,11 @@ body {
   }
   .select2-container--default .select2-selection--multiple {
     background-color: #f1f8e9;
-    border: 1px solid #66bb6a;
+    border: 1px solid #182063;
     width: 100% !important;
   }
   .select2-selection__choice {
-    background-color: #2e7d32;
+    background-color: #182063;
     color: #fff;
     border-radius: 2px;
   }

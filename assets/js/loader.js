@@ -5,5 +5,5 @@ document.addEventListener("DOMContentLoaded", function () {
   setTimeout(() => {
     if (loader) loader.style.display = "none";
     if (mainContent) mainContent.style.display = "block";
-  }, 1000);
+  }, 500);
 });

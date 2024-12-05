@@ -44,6 +44,13 @@ function initializeSidebar() {
   const sidebar = document.getElementById("sidebar");
   const content = document.querySelector(".content");
 
+  // Set sidebar as collapsed by default
+  sidebar.classList.add("collapsed");
+  if (content) {
+    content.style.marginLeft = "80px";
+  }
+  menuIcon.setAttribute("aria-expanded", "false");
+
   menuIcon.addEventListener("click", function () {
     sidebar.classList.toggle("collapsed");
     const isExpanded = menuIcon.getAttribute("aria-expanded") === "true";
